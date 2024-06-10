@@ -7,7 +7,7 @@ class Apicalls():
         # Global Variables / Api call attributes
         self.__ak=os.environ.get('ACCESS_KEY')
         self.__secret=os.environ.get('SECRET')
-        self.__region="api2"
+        self.__region="api4"
     
     # Methods
     def __token(self):
@@ -27,7 +27,8 @@ class Apicalls():
     def azure_protected_items(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
         payload={
-            "query":"config from cloud.resource where api.name = 'azure-recovery-service-backup-protected-item' and resource.status = Active"
+            "query":"config from cloud.resource where api.name = 'azure-recovery-service-backup-protected-item' and resource.status = Active",
+            "withResourceJson": True
         }
         headers={
             'Content-Type': 'application/json; charset=UTF-8',
@@ -36,12 +37,19 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000,"withResourceJson": True}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def azure_vm_list(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
         payload={
-            "query":"config from cloud.resource where api.name = 'azure-vm-list' and resource.status = Active"
+            "query":"config from cloud.resource where api.name = 'azure-vm-list' and resource.status = Active",
+            "limit":10000,
         }
         headers={
             'Content-Type': 'application/json; charset=UTF-8',
@@ -50,7 +58,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def azure_storage_file_shares(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -64,7 +78,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def aws_protected_items(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -78,7 +98,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def aws_ec2_list(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -93,7 +119,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def aws_rds_list(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -108,7 +140,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def aws_ebs_list(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -123,7 +161,13 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
     
     def aws_s3_list(self):
         url="https://{}.prismacloud.io/search/api/v2/config".format(self.__region)
@@ -137,4 +181,10 @@ class Apicalls():
         }
         response=requests.request("POST",url,headers=headers,json=payload)
         response=json.loads(response.content)
-        return response['items']
+        url2="https://{}.prismacloud.io/search/config/page".format(self.__region)
+        nextResponse=requests.request("POST",url2,headers=headers,data=json.dumps({"pageToken":response['nextPageToken'],"limit":10000}))
+        nextResponse=json.loads(nextResponse.content)
+        
+        response=nextResponse['items']
+        
+        return response
