@@ -12,7 +12,7 @@ connection_string=os.environ.get('CONNECTION_STRING')
 container_name1='prismacloudrecursos'
 container_name2='historial'
 
-@app.timer_trigger(schedule="0 * 12,0 * * *", arg_name="myTimer", run_on_startup=False,
+@app.timer_trigger(schedule="0 0 1 * * *", arg_name="myTimer", run_on_startup=False,
               use_monitor=False) 
 def timer_trigger(myTimer: func.TimerRequest) -> None:
     
